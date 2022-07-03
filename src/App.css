@@ -17,10 +17,33 @@ li {
   gap: 20px;
 }
 
+.items__container {
+  min-width: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+.items__container h1 {
+  letter-spacing: 2px;
+}
+
+.items__wrapper {
+  min-height: 200px;
+}
+
+.item {
+  font-size: 2rem;
+}
+
 .buttons__container {
   display: flex;
   align-items: center;
   gap: 10px;
+}
+.pages__container li button.selected {
+  font-weight: bolder;
 }
 
 .pages__container button,
@@ -46,4 +69,21 @@ li {
   align-items: center;
   gap: 10px;
   cursor: pointer;
+}
+
+.form__container {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.form__container input,
+.form__container button {
+  padding: 5px;
+}
+
+.form-input__wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }

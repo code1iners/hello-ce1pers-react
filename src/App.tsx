@@ -1,31 +1,88 @@
 import "./App.css";
-import usePage from "./components/usePage";
 import { clazz } from "@ce1pers/use-class";
+import { useEffect, useMemo, useState } from "react";
+import { useForm } from "react-hook-form";
+import { paginator } from "@ce1pers/use-page";
+
+interface TestForm {
+  number: number;
+  take: number;
+}
 
 function App() {
+  const { register, handleSubmit } = useForm<TestForm>({
+    defaultValues: {
+      number: 10,
+      take: 5,
+    },
+  });
+  const [number, setNumber] = useState(10);
+  const [take, setTake] = useState(5);
+  const [items, setItems] = useState<number[]>([]);
+
+  // Paginator.
   const {
-    items,
-    onNext,
-    onPrevious,
-    pages,
-    onGo,
-    onFirst,
-    onLast,
+    next,
+    previous,
+    getPageList,
+    goTo,
+    goFirst,
+    goLast,
     hasNext,
     hasPrevious,
-  } = usePage({
-    array: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
-  });
+    getValues,
+    getCurrentPage,
+  } = useMemo(
+    () =>
+      paginator<number>({
+        array: [...Array(number).keys()],
+        take,
+      }),
+    [paginator, number, take]
+  );
+
+  useEffect(() => setItems(getValues()), [take]);
+  const onPrevious = () => setItems(previous());
+  const onNext = () => setItems(next());
+  const onGo = (page: number) => setItems(goTo(page));
+  const onFirst = () => setItems(goFirst());
+  const onLast = () => setItems(goLast());
+
+  // Forms.
+  const onValid = (form: TestForm) => {
+    console.log(form);
+    setNumber(+form.number);
+    setTake(+form.take);
+  };
 
   return (
     <div className="container">
-      <ul>
-        {items.map((item) => (
-          <li key={item}>{item}</li>
-        ))}
-      </ul>
+      <section>
+        <form className="form__container" onSubmit={handleSubmit(onValid)}>
+          <div className="form-input__wrapper">
+            <label htmlFor="form-number">Numbers</label>
+            <input id="form-number" type="number" {...register("number")} />
+          </div>
+          <div className="form-input__wrapper">
+            <label htmlFor="form-take">Take</label>
+            <input id="form-take" type="number" {...register("take")} />
+          </div>
+          <button type="submit">Set</button>
+        </form>
+      </section>
 
-      <div className="buttons__container">
+      <section className="items__container">
+        <h1>ITEMS</h1>
+        <ul className="items__wrapper">
+          {items.map((item) => (
+            <li className="item" key={item}>
+              {item}
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section className="buttons__container">
         <button onClick={onFirst}>First</button>
         <button
           className={clazz(
@@ -37,9 +94,13 @@ function App() {
           Previous
         </button>
         <ul className="pages__container">
-          {pages.map((page) => (
+          {getPageList().map((page) => (
             <li key={page} onClick={() => onGo(page)}>
-              <button>{page}</button>
+              <button
+                className={clazz(page === getCurrentPage() ? "selected" : "")}
+              >
+                {page + 1}
+              </button>
             </li>
           ))}
         </ul>
@@ -50,7 +111,7 @@ function App() {
           Next
         </button>
         <button onClick={onLast}>Last</button>
-      </div>
+      </section>
     </div>
   );
 }
