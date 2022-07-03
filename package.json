@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@ce1pers/use-class": "^1.0.5",
-    "@ce1pers/use-page": "^1.6.2",
+    "@ce1pers/use-page": "^1.7.0",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.3.0",
     "@testing-library/user-event": "^13.5.0",

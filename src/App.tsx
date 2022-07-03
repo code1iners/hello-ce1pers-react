@@ -32,6 +32,7 @@ function App() {
     hasPrevious,
     getValues,
     getCurrentPage,
+    getCurrentPageListRange,
   } = useMemo(
     () =>
       paginator<number>({
@@ -94,7 +95,7 @@ function App() {
           Previous
         </button>
         <ul className="pages__container">
-          {getPageList().map((page) => (
+          {getCurrentPageListRange().map((page) => (
             <li key={page} onClick={() => onGo(page)}>
               <button
                 className={clazz(page === getCurrentPage() ? "selected" : "")}
