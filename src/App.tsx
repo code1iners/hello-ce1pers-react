@@ -1,24 +1,56 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import usePage from "./components/usePage";
+import { clazz } from "@ce1pers/use-class";
 
 function App() {
+  const {
+    items,
+    onNext,
+    onPrevious,
+    pages,
+    onGo,
+    onFirst,
+    onLast,
+    hasNext,
+    hasPrevious,
+  } = usePage({
+    array: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+  });
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <div className="container">
+      <ul>
+        {items.map((item) => (
+          <li key={item}>{item}</li>
+        ))}
+      </ul>
+
+      <div className="buttons__container">
+        <button onClick={onFirst}>First</button>
+        <button
+          className={clazz(
+            "previous-button",
+            hasPrevious() ? "is-visible" : ""
+          )}
+          onClick={onPrevious}
         >
-          Learn React
-        </a>
-      </header>
+          Previous
+        </button>
+        <ul className="pages__container">
+          {pages.map((page) => (
+            <li key={page} onClick={() => onGo(page)}>
+              <button>{page}</button>
+            </li>
+          ))}
+        </ul>
+        <button
+          className={clazz("next-button", hasNext() ? "is-visible" : "")}
+          onClick={onNext}
+        >
+          Next
+        </button>
+        <button onClick={onLast}>Last</button>
+      </div>
     </div>
   );
 }
